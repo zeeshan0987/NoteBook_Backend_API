@@ -3,14 +3,16 @@ const mongoURI ="mongodb://localhost:27017/"
 
 
 const connectDB = async () => {
-    try {
-        mongoose.set('strictQuery', false)
-        mongoose.connect(mongoURI) 
-        console.log('Mongo connected')
-    } catch(error) {
-        console.log(error)
-        process.exit()
-    }
+    mongoose.connect("mongodb://127.0.0.1:27017/zeeshasn", {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      })
+        .then(() => {
+          console.log('Connected to MongoDB');
+        })
+        .catch((err) => {
+          console.error('Error connecting to MongoDB:', err);
+        });
 }
 
 module.exports = connectDB
