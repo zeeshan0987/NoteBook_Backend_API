@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 var jwt = require('jsonwebtoken');
 const JWT_SECRET="zeeshankesite";
 const fetchuser =require("../middleware/fatchuser");
-
+const fatchdeta = require('../middleware/fatchdeta')
 //ROUTE 1: Create a User using : POST "/api/auth/createuser".No login required
 router.post(
   "/createuser",
@@ -88,7 +88,7 @@ router.post(
     }
   })
   //ROUTE 3: Get loggedin User Details using : POST "/api/auth/getuser".login required
-  router.post("/getuser",fetchuser,async (req, res) => {
+  router.post("/getuser",fatchdeta,async (req, res) => {
   try {
     serId = req.user.id;
     const user = await User.findOne(serId).select("-password")
