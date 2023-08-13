@@ -5,8 +5,9 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 var jwt = require('jsonwebtoken');
 const JWT_SECRET="zeeshankesite";
+const fetchuser =require("../middleware/fatchuser");
 
-// Create a User using : POST "/api/auth/createuser".No login required
+//ROUTE 1: Create a User using : POST "/api/auth/createuser".No login required
 router.post(
   "/createuser",
   [
@@ -50,7 +51,7 @@ router.post(
     }
   }
 );
-// Authenticate a User using : POST "/api/auth/login".No login required
+//ROUTE 2: Authenticate a User using : POST "/api/auth/login".No login required
 router.post(
   "/login",
   [
@@ -86,4 +87,14 @@ router.post(
       res.status(500).send("Internal Sever Error");
     }
   })
-module.exports = router;
+  //ROUTE 3: Get loggedin User Details using : POST "/api/auth/getuser".login required
+  router.post("/getuser",fetchuser,async (req, res) => {
+  try {
+    serId = req.user.id;
+    const user = await User.findOne(serId).select("-password")
+    res.send(user)
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Sever Error");
+  }})
+  module.exports = router;
