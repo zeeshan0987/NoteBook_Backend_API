@@ -49,7 +49,7 @@ router.post(
     }
   }
 );
-//ROUTE 3: Update an existing Notes User Details using : POST "/api/auth/updatenote".login required
+//ROUTE 3: Update an existing Notes User Details using : PUT "/api/auth/updatenote".login required
 
 router.put("/updatenote/:id",fetchuser,async (req, res) => {
  const{title,description,tag}=req.body;
@@ -68,4 +68,25 @@ router.put("/updatenote/:id",fetchuser,async (req, res) => {
  note =await Note.findByIdAndUpdate(req.params.id,{$set:newNote},{new:true})
  res.json({note})
   })
+
+  //ROUTE 4: Delete an existing Notes User Details using : DELETE "/api/auth/deletenote".login required
+
+router.delete("/deletenote/:id",fetchuser,async (req, res) => {
+  
+  
+ 
+  //Find the note to be delete and delete it
+  let note = await Note.findById(req.params.id);
+  if (!note) {res.status(404).send("Not Found")}
+  //Allow deletion only if user owns this notes
+
+  if (note.user.toString() !== req.user.id) {
+     return res.status(401).send("Not Allowed");
+  }
+
+  
+  note =await Note.findByIdAndDelete(req.params.id)
+  res.json({"Success":"Notes has bee Deleted",note:note})
+   })
+
 module.exports = router;
